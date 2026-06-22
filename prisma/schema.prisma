@@ -1,0 +1,105 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  password  String
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+}
+
+model Store {
+  id        String    @id @default(uuid())
+  name      String
+  createdAt DateTime  @default(now())
+  gondolas  Gondola[]
+}
+
+model Product {
+  id           String         @id @default(uuid())
+  sku          String         @unique
+  name         String
+  brand        String?
+  department   String?
+  subcategory  String?
+  providerCode String?
+  provider     String?
+  width        Float
+  height       Float
+  depth        Float
+  price        Float
+  color        String
+  category     String
+  layers       ProductLayer[]
+}
+
+model Gondola {
+  id                String   @id @default(uuid())
+  name              String
+  aisle             String?
+  category          String?
+  description       String?
+  type              String   // 'pared', 'central', 'cabecera', 'refrigerado'
+  width             Float
+  height            Float
+  depth             Float
+  numShelves        Int
+  gapBetweenShelves Float
+  baseHeight        Float
+  shelfThickness    Float
+  shelfDepth        Float
+  shelfWidth        Float
+  autoPack          Boolean  @default(true)
+  
+  storeId           String
+  store             Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  shelves           Shelf[]
+}
+
+model Shelf {
+  id          String             @id @default(uuid())
+  index       Int
+  y           Float
+  type        String             // 'plancha', 'perchero'
+  hookSpacing Float?
+  depth       Float
+  
+  gondolaId   String
+  gondola     Gondola            @relation(fields: [gondolaId], references: [id], onDelete: Cascade)
+  products    ProductPlacement[]
+}
+
+model ProductPlacement {
+  id        String         @id @default(uuid())
+  x         Float
+  hookIndex Int?
+  placedAt  DateTime       @default(now())
+  
+  shelfId   String
+  shelf     Shelf          @relation(fields: [shelfId], references: [id], onDelete: Cascade)
+  layers    ProductLayer[]
+}
+
+model ProductLayer {
+  id           String           @id @default(uuid())
+  index        Int              // Stack order (0 = base, 1 = layer 1, etc.)
+  facings      Int              @default(1)
+  orientation  Int              @default(0)
+  
+  placementId  String
+  placement    ProductPlacement @relation(fields: [placementId], references: [id], onDelete: Cascade)
+  productId    String
+  product      Product          @relation(fields: [productId], references: [id])
+}

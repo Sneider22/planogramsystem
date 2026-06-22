@@ -1,0 +1,7 @@
+js/
+.next/
+node_modules/
+.env
+.env.db
+docker-compose.yml
+docker-compose.example.yml

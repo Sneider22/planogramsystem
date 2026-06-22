@@ -1,0 +1,18 @@
+name: planograma
+services:
+  # Tu base de datos independiente para los planogramas
+  db_planogramas:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: db_planograma
+    environment: 
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=ESCRIBE_TU_PASSWORD_AQUI
+    ports:
+      - "14333:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+    restart: always
+
+volumes:
+  mssql_data:
+    driver: local
