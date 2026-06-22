@@ -19,17 +19,12 @@ El sistema ha sido estructurado con tecnologías de última generación para gar
 
 ## 📈 Lógica de Negocio y Moneda Nacional (Bs.)
 
-La plataforma ha sido configurada y localizada específicamente para **Locatel Venezuela**.
 *   **Representación Monetaria:** Todos los costos, valorizaciones de góndolas, subtotales de niveles y resúmenes consolidados financieros en pantalla se representan en **Bolívares (Bs.)**.
 *   **Exportación Coherente:** Tanto las descargas de reportes técnicos detallados en PDF como las hojas de cálculo consolidadas de compras generadas en Excel adoptan la nomenclatura de Bolívares (`Bs.`) y formateo numérico localizado para las columnas de costo unitario y total.
 
 ---
 
-## 🗄️ Modelo de Datos Relacional
-
-La base de datos en SQL Server modela con exactitud la jerarquía de una sucursal física.
-
-## 🚀 Guía de Instalación y Despliegue
+## Guía de Instalación y Despliegue
 
 La solución soporta dos entornos: **Desarrollo Local** (híbrido con base de datos en Docker) y **Producción en Contenedores** (completamente Dockerizado).
 
