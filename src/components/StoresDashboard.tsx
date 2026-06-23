@@ -61,6 +61,7 @@ export default function StoresDashboard() {
   // Form Fields
   const [newStoreName, setNewStoreName] = useState("");
   const [customId, setCustomId] = useState("");
+  const [cloneFromStoreId, setCloneFromStoreId] = useState("");
   const [editName, setEditName] = useState("");
   const [editCustomId, setEditCustomId] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
@@ -73,13 +74,18 @@ export default function StoresDashboard() {
       const res = await fetch("/api/stores", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: newStoreName.trim(), customId: customId.trim() }),
+        body: JSON.stringify({ 
+          name: newStoreName.trim(), 
+          customId: customId.trim(),
+          cloneFromStoreId: cloneFromStoreId || null
+        }),
       });
       const data = await res.json();
 
       if (data.success) {
         setNewStoreName("");
         setCustomId("");
+        setCloneFromStoreId("");
         setShowCreateModal(false);
         fetchStores(); // Recargar lista desde SQL Server
       } else {
@@ -392,7 +398,10 @@ export default function StoresDashboard() {
             <div className="px-6 py-4 flex items-center justify-between border-b border-zinc-150">
               <h3 className="text-base font-bold text-[#1f2937]">Crear Nueva Tienda</h3>
               <button
-                onClick={() => setShowCreateModal(false)}
+                onClick={() => {
+                  setShowCreateModal(false);
+                  setCloneFromStoreId("");
+                }}
                 className="p-1 hover:bg-zinc-100 rounded-lg text-zinc-400 hover:text-zinc-650 transition-colors"
               >
                 <X className="h-5 w-5" />
@@ -428,13 +437,34 @@ export default function StoresDashboard() {
                     className="w-full bg-white border border-zinc-200 rounded-lg px-3.5 py-2.5 text-sm text-zinc-800 focus:outline-none focus:border-[#009639] focus:ring-2 focus:ring-[#009639]/10 transition-all font-medium"
                   />
                 </div>
+
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider">
+                    Copiar distribución de (Opcional)
+                  </label>
+                  <select
+                    value={cloneFromStoreId}
+                    onChange={(e) => setCloneFromStoreId(e.target.value)}
+                    className="w-full bg-white border border-zinc-200 rounded-lg px-3.5 py-2.5 text-sm text-zinc-800 focus:outline-none focus:border-[#009639] focus:ring-2 focus:ring-[#009639]/10 transition-all font-medium"
+                  >
+                    <option value="">-- No copiar (Crear vacía) --</option>
+                    {apiStores.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.name} ({s._count?.gondolas || 0} góndolas)
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               {/* Modal Footer */}
               <div className="px-6 py-4 border-t border-zinc-150 flex items-center justify-end gap-3 bg-zinc-50/50">
                 <button
                   type="button"
-                  onClick={() => setShowCreateModal(false)}
+                  onClick={() => {
+                    setShowCreateModal(false);
+                    setCloneFromStoreId("");
+                  }}
                   className="bg-white hover:bg-zinc-50 border border-zinc-250 text-zinc-700 font-bold py-2 px-5 rounded-lg text-sm transition-colors"
                 >
                   Cancelar
