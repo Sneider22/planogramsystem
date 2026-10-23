@@ -1,6 +1,6 @@
 # PlanogramSystem - Locatel 
 
-Plataforma empresarial de ingeniería retail orientada a la creación, gestión y visualización en tiempo real de planogramas comerciales 3D y análisis financiero de inventario.
+Plataforma empresarial de ingeniería retail orientada a la creación, gestión y visualización en tiempo real de planogramas comerciales 3D y análisis financiero de inventario. `Pasantías`
 
 ---
 
